@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<!-- Visting my codepen for the rotating phone: http://codepen.io/davidguan/pen/rmeRQm -->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>presenting</title>
+    <style>
+      html, body {
+        height: 100%;
+        background: #222;
+      }
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        perspective: 15000px;
+      }
+
+      .phone {
+        width: 500px;
+
+        height: 950px;
+        position: relative;
+        transform: translateZ(-25px);
+        transform-style: preserve-3d;
+        animation: rotating 30s ease-in-out infinite;
+      }
+
+      figure {
+        border: 2px solid #151515;
+        margin: 0;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: #fff;
+        opacity: 0.9;
+      }
+
+      figure.front-side {
+        transform: translateZ(25px);
+      }
+
+      figure.front-side .screen {
+        background: #111;
+        position: absolute;
+        left: 5%;
+        top: 12%;
+        width: 90%;
+        height: 80%;
+      }
+
+      figure.front-side .camera {
+        background: #111;
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        border-radius: 10px;
+        left: calc(50% - 10px);
+        top: 4%;
+        background: #111;
+      }
+
+      figure:nth-child(2) {
+        transform: rotateX(180deg) translateZ(25px);
+      }
+
+      figure:nth-child(3) {
+        width: 50px;
+        transform: translateX(450px) rotateY(90deg) translateZ(25px);
+      }
+
+      figure:nth-child(4) {
+        width: 50px;
+        transform:rotateY(-90deg) translateZ(25px);
+      }
+
+      figure:nth-child(5) {
+        height: 50px;
+        transform: translateY(900px) rotateX(-90deg) translateZ(25px);
+      }
+
+      figure:nth-child(6) {
+        height: 50px;
+        transform: rotateX(90deg) translateZ(25px);
+      }
+    </style>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
+  </head>
+  <body>
+    <div class="phone">
+      <figure class="front-side">
+        <div class="screen"></div>
+        <div class="camera"></div>
+      </figure>
+      <figure>
+      </figure>
+      <figure></figure>
+      <figure></figure>
+      <figure></figure>
+      <figure></figure>
+    </div>
+    <script>
+      // Please change the ip based on your server address :)
+      const socket = io('192.168.1.3:5000');
+      const phoneElement = document.querySelector('.phone');
+
+      socket.on('newOri', ({alpha, beta, gamma}) => {
+        phoneElement.style.transform = `rotateZ(${-alpha}deg) rotateX(${90 - beta}deg) rotateY(${gamma}deg) translateZ(-25px)`
+      })
+    </script>
+  </body>
+</html>
